@@ -1,4 +1,5 @@
-import {canvas, canvasHeight, ctx} from "./Canvas.js";
+import { canvas, canvasHeight, ctx } from "./Canvas.js";
+import { round } from "./Utils.js";
 
 enum PlayerMovement { Idle,  Left, Right }
 enum PlayerState { InAir, OnGround }
@@ -27,14 +28,21 @@ export default class Player {
     this.height = height;
     this.name = name;
     this.color = color;
-    this.movement = PlayerMovement.Idle;
     this.state = PlayerState.InAir;
+    this.movement = PlayerMovement.Idle;
     this.events();
   }
   logic() {
+    this.stateLogic();
+    this.movementLogic();
+
+    this.x += this.velocityX;
+    this.y += this.velocityY;
+  }
+
+  stateLogic() {
     if((this.y + this.height + this.velocityY) >= canvasHeight) {
       this.velocityY = canvasHeight - (this.y + this.height);
-      console.log(this.y, this.velocityY);
       this.y += this.velocityY;
       this.state = PlayerState.OnGround;
     }
@@ -46,15 +54,38 @@ export default class Player {
         this.velocityY += .14;
         break;
     }
+  }
 
-    this.x += this.velocityX;
-    this.y += this.velocityY;
+  movementLogic() {
+    switch (this.movement) {
+      case PlayerMovement.Right:
+        if(this.velocityX < 1.5)
+          this.velocityX += .1;
+        else this.velocityX = 1.5;
+        break;
+      case PlayerMovement.Left:
+        if(this.velocityX > -1.5)
+          this.velocityX += -.1;
+        else this.velocityX = -1.5;
+        break;
+      case PlayerMovement.Idle:
+        if(round(this.velocityX) === 0) {
+          console.log("Stopped")
+          this.velocityX = 0;
+        }
+        if(round(this.velocityX) < 0)
+          this.velocityX += .1;
+        if(round(this.velocityX) > 0)
+          this.velocityX += -.1;
+        break;
+    }
   }
 
   draw() {
     const oldStyle= ctx.fillStyle;
 
     // Draw name
+    ctx.font = "14px apple";
     const textCenterX = this.x + (this.width / 2) - ctx.measureText(this.name).width / 2;
     ctx.fillText(this.name, textCenterX, this.y-10);
 
@@ -83,7 +114,13 @@ export default class Player {
   }
 
   endMoving(event : KeyboardEvent) {
-    this.movement = PlayerMovement.Idle;
+    switch (event.code) {
+      case "KeyA":
+      case "KeyD":
+        this.movement = PlayerMovement.Idle;
+        break;
+    }
+
   }
 
   events() {

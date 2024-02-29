@@ -1,7 +1,7 @@
 export const canvas = document.getElementById("canvas-lobby") as HTMLCanvasElement;
 export const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-export const canvasWidth = 800;
-export const canvasHeight = 500;
+export const canvasWidth = 1200;
+export const canvasHeight = 700;
 function setCanvasSize() {
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;

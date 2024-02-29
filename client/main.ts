@@ -1,5 +1,14 @@
 import Player from "./Player.js";
-import {canvas, ctx} from "./Canvas.js";
+import { canvas, ctx } from "./Canvas.js";
+import { Socket } from "./WebSocket.js";
+Socket.instance.addEventListener("open", () => {
+  console.log(`[websockets] Connected to ${Socket.instance.url}`);
+});
+
+Socket.instance.addEventListener("message", (message) => {
+  console.log(message.data)
+})
+
 class Game {
   private players : Player[];
   constructor() {
