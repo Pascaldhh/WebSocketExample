@@ -7,14 +7,14 @@
 </head>
 <body class="bg-gray-100">
   <div class="h-screen flex justify-center items-center flex-col">
-    <header class="text-center">
-      <h1 class="text-xl font-bold">Websocket example</h1>
-      <div class="status">
-        <p><strong>Total players </strong><span id="player-count" class="">0</span></p>
-      </div>
-    </header>
-
     <div class="relative">
+      <div class="absolute w-full bottom-full">
+        <header class="grid grid-cols-3 mb-2">
+          <h1 class="text-xl font-bold self-center">Websocket example</h1>
+          <p class="self-center justify-self-center"><strong>Total players: </strong><span id="player-count">0</span></p>
+          <button id="leave" class="self-center justify-self-end bg-red-500 hover:bg-red-600 disabled:bg-gray-900/20 transition-colors text-white py-1 px-4 rounded" disabled>Leave</button>
+        </header>
+      </div>
       <canvas id="canvas-lobby" class="border-2 border-black"></canvas>
       <div class="absolute inset-0 bg-gray-300 flex justify-center items-center">
         <form id="start-form" class="flex flex-col gap-4">
@@ -26,7 +26,7 @@
             <label for="color">Pick color</label>
             <input type="color" id="color" name="color" placeholder="Color"/>
           </div>
-          <button type="submit" class="bg-red-500 hover:bg-red-600 transition-colors text-white py-2 rounded">Join</button>
+          <button type="submit" class="bg-green-500 hover:bg-green-600 transition-colors text-white py-2 rounded">Join</button>
         </form>
       </div>
     </div>
