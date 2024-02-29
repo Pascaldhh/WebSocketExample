@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../out/style.css">
+  <title>Websockets - playground</title>
+</head>
+<body class="bg-gray-100">
+  <div class="h-screen flex justify-center items-center flex-col">
+    <header class="text-center">
+      <h1 class="text-xl font-bold">Websocket example</h1>
+      <div class="status">
+        <p><strong>Total players </strong><span id="player-count" class="">0</span></p>
+      </div>
+    </header>
+
+    <div class="relative">
+      <canvas id="canvas-lobby" class="border-2 border-black"></canvas>
+      <div class="absolute inset-0 bg-gray-300 flex justify-center items-center">
+        <form id="start-form" class="flex flex-col gap-4">
+          <div class="flex flex-col">
+            <label for="name">Name</label>
+            <input class="px-3 py-1 rounded" type="text" id="name" name="name" placeholder="Enter"/>
+          </div>
+          <div class="flex flex-col">
+            <label for="color">Pick color</label>
+            <input type="color" id="color" name="color" placeholder="Color"/>
+          </div>
+          <button type="submit" class="bg-red-500 hover:bg-red-600 transition-colors text-white py-2 rounded">Join</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer class="absolute w-full bottom-0 py-2">
+    <p class="text-center">You can find the source code at <a class="underline transition-colors text-red-800 hover:text-red-950" href="https://github.com/Pascaldhh/WebSocketExample" target="_blank">github</a></p>
+  </footer>
+  <script type="module" src="../out/main.js"></script>
+</body>
+</html>
