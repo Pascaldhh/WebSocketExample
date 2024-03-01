@@ -8,9 +8,10 @@ public interface ISendType
 {
     public SendType Type { get; set; }
 }
-public class InitConfirmData(bool isReady)
+public class InitConfirmData(bool isReady, string? error)
 {
     public bool IsReady { get; set; } = isReady;
+    public string? Error { get; set; } = error;
 }
 
 

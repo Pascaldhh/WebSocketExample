@@ -34,6 +34,12 @@ class Game {
       const recieveData : RecieveData = JSON.parse(message.data);
       switch (recieveData.type) {
         case RecieveType.InitConfirm:
+          if(!recieveData.data?.isready) {
+            const errorEl = document.getElementById("error");
+            if(errorEl == null) return;
+            errorEl.textContent = recieveData.data.error;
+            return;
+          }
           this.players = recieveData.data?.game?.players;
           this.start();
           break;

@@ -43,8 +43,13 @@ public class SocketWorker : BackgroundService
             {
                 case RecieveType.Init:
                     Player newPlayer = new(ws, 100, 100, 30, 60, data.Data.Name, data.Data.Color);
-                    Game.Players.Add(newPlayer);
-                    await SendJsonObject(ws, new SendData(SendType.InitConfirm, new InitConfirmData(true)));
+                    string? error = newPlayer.Error();
+                    if(error != null) await SendJsonObject(ws, new SendData(SendType.InitConfirm, new InitConfirmData(false, error)));
+                    else
+                    {
+                        Game.Players.Add(newPlayer);
+                        await SendJsonObject(ws, new SendData(SendType.InitConfirm, new InitConfirmData(true, null)));
+                    }
                     break;
 
                 case RecieveType.Movement:

@@ -40,6 +40,13 @@ public class Player
         Color = color;
     }
 
+    public string? Error()
+    {
+        if (Name.Length > 50 || Color.Length > 50) return "Input fields can't be longer than 50!";
+        if (Name.Length < 5) return "Name must be longer than 4 chars";
+        return null;
+    }
+
     public void Logic()
     {
         StateLogic();
