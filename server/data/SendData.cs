@@ -8,10 +8,12 @@ public interface ISendType
 {
     public SendType Type { get; set; }
 }
-public class InitConfirmData
+public class InitConfirmData(bool isReady)
 {
-    public bool IsReady { get; set; }
+    public bool IsReady { get; set; } = isReady;
 }
+
+
 public class SendData(SendType type, object data) : ISendType
 {
     public SendType Type { get; set; } = type;

@@ -14,8 +14,11 @@ public class SocketWorker : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             Game.Loop();
-            foreach (Player player in Game.Players)
+            foreach (Player player in Game.Players.ToList())
+            {
+                if(player.WS.State != WebSocketState.Open) CloseSocket(player.WS, player);
                 await SendJsonObject(player.WS, new SendData(SendType.GameInfo, Game));
+            }
 
             await Task.Delay(1000 / 60, stoppingToken); // 60fps logic loop
         }
@@ -35,9 +38,16 @@ public class SocketWorker : BackgroundService
             using MemoryStream ms = new(buffer, 0, result.Count);
             RecieveInitData? initPlayerData = JsonSerializer.Deserialize<RecieveInitData>(ms, new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
             if(initPlayerData?.Data == null) return;
-            Game.Players.Add(new Player(ws, 100, 100, 30, 60, initPlayerData.Data.Name, initPlayerData.Data.Color));
-            await SendJsonObject(ws, new SendData(SendType.InitConfirm, new InitConfirmData{ IsReady = true }));
+            Player newPlayer = new(ws, 100, 100, 30, 60, initPlayerData.Data.Name, initPlayerData.Data.Color);
+            Game.Players.Add(newPlayer);
+            await SendJsonObject(ws, new SendData(SendType.InitConfirm, new InitConfirmData(true)));
         }
+    }
+
+    public async Task SendJsonObject(WebSocket[] wss, object obj)
+    {
+        foreach (WebSocket ws in wss)
+            await SendJsonObject(ws, obj);
     }
 
     public async Task SendJsonObject(WebSocket ws, object obj)
@@ -50,9 +60,13 @@ public class SocketWorker : BackgroundService
             CloseSocket(ws);
     }
 
+    public async void CloseSocket(WebSocket ws, Player player)
+    {
+        Game.Players.Remove(player);
+        CloseSocket(ws);
+    }
     public async void CloseSocket(WebSocket ws)
     {
         Connections.Remove(ws);
-        await ws.CloseAsync(WebSocketCloseStatus.Empty, string.Empty, CancellationToken.None);
     }
 }

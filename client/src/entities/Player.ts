@@ -1,45 +1,27 @@
 import { canvas, canvasHeight, ctx } from "./Canvas.js";
 
-export default class Player {
-  private x : number;
-  private y : number;
+export type Player = {
+  id: number;
+  name: string;
+  color: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
 
-  private width: number;
-  private height : number;
-  private name : string;
-  private color : string;
+export function drawPlayer(player : Player) {
+  const oldStyle= ctx.fillStyle;
 
-  constructor(x : number, y : number, width : number, height : number, name: string, color : string) {
-    this.x = x;
-    this.y = y
-    this.width = width;
-    this.height = height;
-    this.name = name;
-    this.color = color;
-  }
+  // Draw name
+  ctx.font = "14px Arial";
+  const textCenterX = player.x + (player.width / 2) - ctx.measureText(player.name).width / 2;
+  ctx.fillText(player.name, textCenterX, player.y-10);
 
-  setValues(x : number, y : number, width : number, height : number, name: string, color : string) {
-    this.x = x;
-    this.y = y
-    this.width = width;
-    this.height = height;
-    this.name = name;
-    this.color = color;
-  }
-
-  draw() {
-    const oldStyle= ctx.fillStyle;
-
-    // Draw name
-    ctx.font = "14px Arial";
-    const textCenterX = this.x + (this.width / 2) - ctx.measureText(this.name).width / 2;
-    ctx.fillText(this.name, textCenterX, this.y-10);
-
-    // Draw square
-    ctx.fillStyle = "black";
-    ctx.fillRect(this.x-2, this.y-2, this.width+4, this.height+4);
-    ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
-    ctx.fillStyle = oldStyle;
-  }
+  // Draw square
+  ctx.fillStyle = "black";
+  ctx.fillRect(player.x-2, player.y-2, player.width+4, player.height+4);
+  ctx.fillStyle = player.color;
+  ctx.fillRect(player.x, player.y, player.width, player.height);
+  ctx.fillStyle = oldStyle;
 }

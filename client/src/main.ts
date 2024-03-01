@@ -1,11 +1,11 @@
-import Player from "./entities/Player.js";
-import {canvas, ctx} from "./entities/Canvas.js";
-import {Socket} from "./entities/WebSocket.js";
-import {SendData, SendType} from "./data/SendData.js";
-import {RecieveData, RecieveType} from "./data/RecieveData.js";
+import {drawPlayer, Player} from "./entities/Player.js";
+import { canvas, ctx } from "./entities/Canvas.js";
+import { Socket } from "./entities/WebSocket.js";
+import { SendData, SendType } from "./data/SendData.js";
+import { RecieveData, RecieveType } from "./data/RecieveData.js";
 
 class Game {
-  private players : Player[];
+  public players : Player[];
   constructor() {
     this.players = [];
     this.socketEvents();
@@ -19,8 +19,7 @@ class Game {
 
   draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    this.players.forEach(player => player.draw());
-
+    this.players?.forEach(player => drawPlayer(player));
     requestAnimationFrame(this.draw.bind(this));
   }
 
@@ -29,14 +28,21 @@ class Game {
       const recieveData : RecieveData = JSON.parse(message.data);
       switch (recieveData.type) {
         case RecieveType.InitConfirm:
+          this.players = recieveData.data?.game?.players;
           this.start();
           break;
         case RecieveType.GameInfo:
-          recieveData.data[];
-          this.players.push();
+          this.players = recieveData.data?.players;
+          this.setPlayerCount(this.players.length);
           break;
       }
     });
+  }
+
+  setPlayerCount(n : number) {
+    const countElement = document.getElementById("player-count");
+    if(countElement == null) return;
+    countElement.textContent = `${n}`;
   }
 
   events() {

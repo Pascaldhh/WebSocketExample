@@ -16,8 +16,6 @@ public class Game
     public void Loop()
     {
         foreach (Player player in Players)
-        {
             player.Logic();
-        }
     }
 }
