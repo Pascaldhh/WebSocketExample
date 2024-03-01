@@ -42,28 +42,4 @@ export default class Player {
     ctx.fillRect(this.x, this.y, this.width, this.height);
     ctx.fillStyle = oldStyle;
   }
-
-  startMoving(event : KeyboardEvent) {
-    switch (event.code) {
-      case "KeyA":
-        break;
-      case "KeyD":
-        break;
-      case "KeyW":
-      case "Space":
-        break;
-    }
-  }
-
-  endMoving(event : KeyboardEvent) {
-    switch (event.code) {
-      case "KeyA":
-      case "KeyD":
-    }
-  }
-
-  events() {
-    addEventListener("keydown", this.startMoving.bind(this));
-    addEventListener("keyup", this.endMoving.bind(this));
-  }
 }

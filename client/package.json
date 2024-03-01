@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "tsc --watch"
+    "start": "tsc --watch",
+    "tailwind": "npx tailwindcss -i ./src/style.css -o ./out/style.css --watch"
   },
   "dependencies": {
     "tailwindcss": "^3.4.1",

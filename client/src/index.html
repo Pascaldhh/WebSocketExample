@@ -16,18 +16,20 @@
         </header>
       </div>
       <canvas id="canvas-lobby" class="border-2 border-black"></canvas>
-      <div class="absolute inset-0 bg-gray-300 flex justify-center items-center">
-        <form id="start-form" class="flex flex-col gap-4">
-          <div class="flex flex-col">
-            <label for="name">Name</label>
-            <input class="px-3 py-1 rounded" type="text" id="name" name="name" placeholder="Enter"/>
-          </div>
-          <div class="flex flex-col">
-            <label for="color">Pick color</label>
-            <input type="color" id="color" name="color" placeholder="Color"/>
-          </div>
-          <button type="submit" class="bg-green-500 hover:bg-green-600 transition-colors text-white py-2 rounded">Join</button>
-        </form>
+      <div id="screen-init" class="group">
+        <div class="group-[.closed]:hidden absolute inset-0 bg-gray-300 flex justify-center items-center">
+          <form id="start-form" class="flex flex-col gap-4">
+            <div class="flex flex-col">
+              <label for="name">Name</label>
+              <input class="px-3 py-1 rounded" type="text" id="name" name="name" placeholder="Enter"/>
+            </div>
+            <div class="flex flex-col">
+              <label for="color">Pick color</label>
+              <input type="color" id="color" name="color" placeholder="Color"/>
+            </div>
+            <button type="submit" class="bg-green-500 hover:bg-green-600 transition-colors text-white py-2 rounded">Join</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>

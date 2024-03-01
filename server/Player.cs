@@ -1,4 +1,5 @@
 using System.Net.WebSockets;
+using System.Text.Json.Serialization;
 
 namespace server;
 
@@ -7,6 +8,8 @@ enum PlayerState { InAir, OnGround }
 
 public class Player(WebSocket ws, double x, double y, int width, int height, string name, string color)
 {
+    [JsonIgnore]
+    public WebSocket WS { get; } = ws;
     public string Name { get; set; } = name;
     public string Color { get; set; } = color;
     public double X { get; set; } = x;

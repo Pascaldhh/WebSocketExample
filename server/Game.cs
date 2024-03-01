@@ -13,13 +13,11 @@ public class Game
     public int Width { get; set; } = GameInfo.Width;
     public int Height { get; set; } = GameInfo.Height;
     public List<Player> Players { get; set; } = [];
-    public async Task Loop()
+    public void Loop()
     {
         foreach (Player player in Players)
         {
             player.Logic();
         }
     }
-
-
 }
