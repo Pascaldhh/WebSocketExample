@@ -11,7 +11,7 @@
       <div class="absolute w-full bottom-full">
         <header class="grid grid-cols-3 mb-2">
           <h1 class="text-xl font-bold self-center">Websocket example</h1>
-          <p class="self-center justify-self-center"><strong>Total players: </strong><span id="player-count">0</span></p>
+          <p class="self-center justify-self-center"><strong>Total players: </strong><span id="player-count">-</span></p>
           <button id="leave" class="self-center justify-self-end bg-red-500 hover:bg-red-600 disabled:bg-gray-900/20 transition-colors text-white py-1 px-4 rounded" disabled>Leave</button>
         </header>
       </div>
@@ -29,6 +29,11 @@
             </div>
             <button type="submit" class="bg-green-500 hover:bg-green-600 transition-colors text-white py-2 rounded">Join</button>
           </form>
+        </div>
+      </div>
+      <div id="screen-disconnect" class="group">
+        <div class="group-[.show]:flex hidden absolute w-full h-full z-40 inset-0 bg-gray-300 justify-center items-center">
+          <p>Couldn't connect to server, please try again later.</p>
         </div>
       </div>
     </div>

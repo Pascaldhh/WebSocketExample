@@ -3,8 +3,8 @@ using System.Text.Json.Serialization;
 
 namespace server;
 
-enum PlayerMovement { Idle,  Left, Right }
-enum PlayerState { InAir, OnGround }
+public enum PlayerMovement { Idle,  Left, Right }
+public enum PlayerState { InAir, OnGround }
 
 public class Player
 {
@@ -22,10 +22,10 @@ public class Player
     public int Height { get; set; }
 
     private double VelocityX { get; set; }
-    private double VelocityY { get; set; }
+    public double VelocityY { get; set; }
 
-    private PlayerState State { get; set; } = PlayerState.InAir;
-    private PlayerMovement Movement { get; set; } = PlayerMovement.Idle;
+    public PlayerState State { get; set; } = PlayerState.InAir;
+    public PlayerMovement Movement { get; set; } = PlayerMovement.Idle;
 
     public Player(WebSocket ws, double x, double y, int width, int height, string name, string color)
     {
@@ -44,9 +44,27 @@ public class Player
     {
         StateLogic();
         MovementLogic();
+        Collision();
 
         X += VelocityX;
         Y += VelocityY;
+    }
+
+    private void Collision()
+    {
+        if (X <= 0)
+        {
+            Movement = PlayerMovement.Idle;
+            VelocityX = 0;
+            X = 1;
+        }
+
+        if (X + Width >= GameInfo.Width)
+        {
+            Movement = PlayerMovement.Idle;
+            VelocityX = 0;
+            X = GameInfo.Width - Width - 1;
+        }
     }
 
     private void StateLogic()

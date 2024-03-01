@@ -1,4 +1,5 @@
 import { canvas, canvasHeight, ctx } from "./Canvas.js";
+export enum PlayerMovement { Idle,  Left, Right }
 
 export type Player = {
   id: number;

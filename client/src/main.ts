@@ -1,8 +1,8 @@
-import {drawPlayer, Player} from "./entities/Player.js";
-import { canvas, ctx } from "./entities/Canvas.js";
-import { Socket } from "./entities/WebSocket.js";
-import { SendData, SendType } from "./data/SendData.js";
-import { RecieveData, RecieveType } from "./data/RecieveData.js";
+import {drawPlayer, Player, PlayerMovement} from "./entities/Player.js";
+import {canvas, ctx} from "./entities/Canvas.js";
+import {Socket} from "./entities/WebSocket.js";
+import {SendData, SendType} from "./data/SendData.js";
+import {RecieveData, RecieveType} from "./data/RecieveData.js";
 
 class Game {
   public players : Player[];
@@ -14,7 +14,13 @@ class Game {
 
   start() {
     document?.getElementById("screen-init")?.classList.add("closed");
+    (document.getElementById("leave") as HTMLButtonElement).disabled = false;
+    this.addKeyEvents();
     requestAnimationFrame(this.draw.bind(this));
+  }
+
+  stop() {
+    window.location.reload();
   }
 
   draw() {
@@ -49,18 +55,21 @@ class Game {
     document.getElementById("start-form")?.addEventListener("submit", (e : SubmitEvent) => {
       e.preventDefault();
       const data = new FormData(e.currentTarget as HTMLFormElement);
-      Socket.send(JSON.stringify(new SendData(SendType.init, {"name": data.get("name"), "color": data.get("color")})));
+      Socket.send(JSON.stringify(new SendData(SendType.Init, {"name": data.get("name"), "color": data.get("color")})));
     });
+    document.getElementById("leave")?.addEventListener("click", () => this.stop());
   }
 
   startMoving(event : KeyboardEvent) {
     switch (event.code) {
       case "KeyA":
+        Socket.send(JSON.stringify(new SendData(SendType.Movement, { "movement": PlayerMovement.Left })));
         break;
       case "KeyD":
+        Socket.send(JSON.stringify(new SendData(SendType.Movement, { "movement": PlayerMovement.Right })));
         break;
-      case "KeyW":
       case "Space":
+        Socket.send(JSON.stringify(new SendData(SendType.Movement, { "jump": true })));
         break;
     }
   }
@@ -69,12 +78,18 @@ class Game {
     switch (event.code) {
       case "KeyA":
       case "KeyD":
+        Socket.send(JSON.stringify(new SendData(SendType.Movement, { "movement": PlayerMovement.Idle })));
     }
   }
 
-  keyEvents() {
+  addKeyEvents() {
     addEventListener("keydown", this.startMoving.bind(this));
     addEventListener("keyup", this.endMoving.bind(this));
+  }
+
+  removeKeyEvents() {
+    removeEventListener("keydown", this.startMoving.bind(this));
+    removeEventListener("keyup", this.endMoving.bind(this));
   }
 }
 

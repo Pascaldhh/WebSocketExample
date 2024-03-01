@@ -20,7 +20,7 @@ public class SocketWorker : BackgroundService
                 await SendJsonObject(player.WS, new SendData(SendType.GameInfo, Game));
             }
 
-            await Task.Delay(1000 / 60, stoppingToken); // 60fps logic loop
+            await Task.Delay(1000 / 120, stoppingToken); // 60fps logic loop
         }
     }
 
@@ -36,11 +36,40 @@ public class SocketWorker : BackgroundService
                 return;
             }
             using MemoryStream ms = new(buffer, 0, result.Count);
-            RecieveInitData? initPlayerData = JsonSerializer.Deserialize<RecieveInitData>(ms, new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
-            if(initPlayerData?.Data == null) return;
-            Player newPlayer = new(ws, 100, 100, 30, 60, initPlayerData.Data.Name, initPlayerData.Data.Color);
-            Game.Players.Add(newPlayer);
-            await SendJsonObject(ws, new SendData(SendType.InitConfirm, new InitConfirmData(true)));
+            RecieveData? data = JsonSerializer.Deserialize<RecieveData>(ms, new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
+            if(data?.Data == null) return;
+
+            switch (data.Type)
+            {
+                case RecieveType.Init:
+                    Player newPlayer = new(ws, 100, 100, 30, 60, data.Data.Name, data.Data.Color);
+                    Game.Players.Add(newPlayer);
+                    await SendJsonObject(ws, new SendData(SendType.InitConfirm, new InitConfirmData(true)));
+                    break;
+
+                case RecieveType.Movement:
+                    Player player = Game.Players.First(player => player.WS.Equals(ws));
+
+                    switch (data.Data.Movement)
+                    {
+                        case PlayerMovement.Left:
+                            player.Movement = PlayerMovement.Left;
+                            break;
+                        case PlayerMovement.Right:
+                            player.Movement = PlayerMovement.Right;
+                            break;
+                        case PlayerMovement.Idle:
+                            player.Movement = PlayerMovement.Idle;
+                            break;
+                    }
+
+                    if (data.Data.Jump && player.State != PlayerState.InAir)
+                    {
+                        player.VelocityY = -5;
+                        player.State = PlayerState.InAir;
+                    }
+                    break;
+            }
         }
     }
 

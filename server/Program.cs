@@ -4,10 +4,7 @@ using server;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseUrls("http://localhost:6969");
-// builder.Services.Configure<HostOptions>(hostOptions =>
-// {
-//     hostOptions.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.Ignore;
-// });
+
 // Add in dependency injection and add BackgroundService
 builder.Services.AddSingleton<SocketWorker>();
 builder.Services.AddHostedService<SocketWorker>(p => p.GetRequiredService<SocketWorker>());

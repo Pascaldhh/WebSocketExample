@@ -1,4 +1,4 @@
-export enum SendType { init }
+export enum SendType { Init, Movement }
 
 export class SendData {
   public type: SendType;

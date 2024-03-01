@@ -4,14 +4,17 @@ class WSocket {
   public instance;
   constructor(url: string) {
     this.instance = new WebSocket(url);
+    this.instance.onerror = () => document.getElementById("screen-disconnect")?.classList.add("show");
   }
   response(callback : Action) {
-    Socket.instance.addEventListener("message", (message) => {
+    if(this.instance == null) return;
+    this.instance.addEventListener("message", (message) => {
       callback(message);
     })
   }
   send(data : string | ArrayBufferLike | Blob | ArrayBufferView) {
-    Socket.instance.send(data);
+    if(this.instance == null) return;
+    this.instance.send(data);
   }
 }
 export const Socket: WSocket = new WSocket("ws://localhost:6969/");
